@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    [data-anim] { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    [data-anim].anim-in { opacity:1; transform:translateY(0); }
+
+    /* Services List */
+    .services-list-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-bottom:4rem; }
+    .service-list-card {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      overflow:hidden;
+      transition:var(--transition);
+    }
+    .service-list-card:hover { transform:translateY(-6px); border-color:rgba(230,57,70,.3); box-shadow:0 12px 40px rgba(0,0,0,.4); }
+    .service-card-header {
+      padding:2rem;
+      background:linear-gradient(135deg,#1a0608,#2a1010);
+      text-align:center;
+    }
+    .service-card-header .icon { font-size:3.5rem; margin-bottom:.5rem; }
+    .service-card-header h3 { color:var(--white); font-size:1.15rem; }
+    .service-card-body { padding:1.5rem; }
+    .service-card-body p { color:var(--gray); font-size:.88rem; line-height:1.7; margin-bottom:1rem; }
+    .service-tag {
+      display:inline-block;
+      background:rgba(230,57,70,.12);
+      color:var(--primary);
+      padding:.2rem .7rem;
+      border-radius:50px;
+      font-size:.75rem;
+      font-weight:600;
+      margin:.15rem;
+    }
+    .service-price { color:var(--white); font-size:1.2rem; font-weight:800; margin-top:.75rem; }
+    .service-price span { color:var(--gray); font-size:.8rem; font-weight:400; }
+
+    /* Gallery filter */
+    .gallery-filters { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
+    .gfilter {
+      padding:.4rem 1.2rem;
+      border-radius:50px;
+      border:1px solid rgba(255,255,255,.1);
+      background:none;
+      color:var(--gray);
+      font-size:.85rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .gfilter.active, .gfilter:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    /* Visual gallery items using gradients + emoji */
+    .gallery-visual {
+      width:100%;
+      aspect-ratio:4/3;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:4rem;
+      transition:transform .5s ease;
+    }
+    .gallery-item:hover .gallery-visual { transform:scale(1.08); }
+    .g1  { background:linear-gradient(135deg,#1a0608,#3d0c12); }
+    .g2  { background:linear-gradient(135deg,#021a10,#073d20); }
+    .g3  { background:linear-gradient(135deg,#0a0a20,#15153d); }
+    .g4  { background:linear-gradient(135deg,#1a1000,#3d2800); }
+    .g5  { background:linear-gradient(135deg,#1a0010,#3d0028); }
+    .g6  { background:linear-gradient(135deg,#001a1a,#003d3d); }
+    .g7  { background:linear-gradient(135deg,#1a1a00,#3d3d00); }
+    .g8  { background:linear-gradient(135deg,#0a1a00,#1a3d00); }
+    .g9  { background:linear-gradient(135deg,#1a0a00,#3d1500); }
+    .g10 { background:linear-gradient(135deg,#00101a,#00283d); }
+    .g11 { background:linear-gradient(135deg,#150520,#2d0845); }
+    .g12 { background:linear-gradient(135deg,#1a0505,#3d0505); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html"><span class="icon">🏋️</span>Power<span>Zone</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html">Q&amp;A</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-content">
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Gallery &amp; <span>Services</span></h1>
+    <p>Explore our facilities, classes, and world-class services</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Gallery</span></div>
+  </div>
+</div>
+
+<!-- SERVICES LIST -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">What We Offer</span>
+      <h2>Our Products &amp; <span>Services</span></h2>
+      <p>Comprehensive fitness solutions crafted for every goal and lifestyle.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="services-list-grid">
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header"><div class="icon">🏋️</div><h3>Strength Training</h3></div>
+        <div class="service-card-body">
+          <p>Our fully-equipped strength floor features 200+ pieces of equipment including free weights up to 120 kg, power racks, cable machines, and dedicated functional training zones.</p>
+          <div><span class="service-tag">Barbell</span><span class="service-tag">Dumbbells</span><span class="service-tag">Machines</span><span class="service-tag">Functional</span></div>
+          <div class="service-price">Included <span>in all plans</span></div>
+        </div>
+      </div>
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header" style="background:linear-gradient(135deg,#021a10,#073d20);"><div class="icon">🏃</div><h3>Cardio Zone</h3></div>
+        <div class="service-card-body">
+          <p>50+ cardio machines with built-in entertainment screens. Treadmills, bikes, rowers, steppers, and ellipticals — all maintained to the highest standards.</p>
+          <div><span class="service-tag">Treadmill</span><span class="service-tag">Cycling</span><span class="service-tag">Rowing</span><span class="service-tag">HIIT</span></div>
+          <div class="service-price">Included <span>in all plans</span></div>
+        </div>
+      </div>
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header" style="background:linear-gradient(135deg,#0a0a20,#15153d);"><div class="icon">🥊</div><h3>Boxing &amp; MMA</h3></div>
+        <div class="service-card-body">
+          <p>A dedicated 3,000 sqft combat sports arena with ring, heavy bags, speed bags, and expert coaches certified in boxing, Muay Thai, and MMA.</p>
+          <div><span class="service-tag">Boxing</span><span class="service-tag">Muay Thai</span><span class="service-tag">MMA</span><span class="service-tag">Self-Defense</span></div>
+          <div class="service-price">₹499 <span>/ month add-on</span></div>
+        </div>
+      </div>
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header" style="background:linear-gradient(135deg,#1a1000,#3d2800);"><div class="icon">🧘</div><h3>Yoga &amp; Wellness</h3></div>
+        <div class="service-card-body">
+          <p>Three serene yoga studios with professional-grade mats, props, and sound systems. Classes ranging from beginner Hatha to advanced Ashtanga and Yin yoga.</p>
+          <div><span class="service-tag">Hatha</span><span class="service-tag">Vinyasa</span><span class="service-tag">Yin Yoga</span><span class="service-tag">Meditation</span></div>
+          <div class="service-price">₹699 <span>/ month add-on</span></div>
+        </div>
+      </div>
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header" style="background:linear-gradient(135deg,#001a1a,#003d3d);"><div class="icon">🏊</div><h3>Aqua Fitness</h3></div>
+        <div class="service-card-body">
+          <p>Olympic-size heated pool (50m x 25m, 8 lanes) maintained at 28°C. Offers lap swimming, aqua aerobics, hydrotherapy, and professional swimming lessons for all ages.</p>
+          <div><span class="service-tag">Lap Swimming</span><span class="service-tag">Aqua Aerobics</span><span class="service-tag">Lessons</span></div>
+          <div class="service-price">₹999 <span>/ month add-on</span></div>
+        </div>
+      </div>
+
+      <div class="service-list-card" data-anim>
+        <div class="service-card-header" style="background:linear-gradient(135deg,#0a1a00,#1a3d00);"><div class="icon">🥗</div><h3>Nutrition Coaching</h3></div>
+        <div class="service-card-body">
+          <p>One-on-one sessions with registered dietitians. Includes body composition analysis, personalised meal plans, supplement guidance, and ongoing support via app.</p>
+          <div><span class="service-tag">Meal Plans</span><span class="service-tag">Body Analysis</span><span class="service-tag">Supplements</span></div>
+          <div class="service-price">₹1,499 <span>/ month add-on</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Our Facilities</span>
+      <h2>Photo <span>Gallery</span></h2>
+      <p>Take a virtual tour of our world-class fitness centre.</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="gallery-filters" data-anim>
+      <button class="gfilter active" onclick="filterGallery(this,'all')">All</button>
+      <button class="gfilter" onclick="filterGallery(this,'gym')">🏋️ Gym Floor</button>
+      <button class="gfilter" onclick="filterGallery(this,'classes')">👥 Classes</button>
+      <button class="gfilter" onclick="filterGallery(this,'pool')">🏊 Pool</button>
+      <button class="gfilter" onclick="filterGallery(this,'wellness')">🧘 Wellness</button>
+      <button class="gfilter" onclick="filterGallery(this,'events')">🏆 Events</button>
+    </div>
+
+    <div class="gallery-grid" data-anim>
+
+      <div class="gallery-item" data-gcat="gym">
+        <div class="gallery-visual g1">🏋️</div>
+        <div class="gallery-overlay"><span>Main Weight Floor</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="classes">
+        <div class="gallery-visual g2">🥊</div>
+        <div class="gallery-overlay"><span>Boxing Class in Session</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="pool">
+        <div class="gallery-visual g3">🏊</div>
+        <div class="gallery-overlay"><span>Olympic Swimming Pool</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="wellness">
+        <div class="gallery-visual g4">🧘</div>
+        <div class="gallery-overlay"><span>Yoga Studio A</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="gym">
+        <div class="gallery-visual g5">🏃</div>
+        <div class="gallery-overlay"><span>Cardio Zone</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="events">
+        <div class="gallery-visual g6">🏆</div>
+        <div class="gallery-overlay"><span>Annual Fitness Challenge 2025</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="classes">
+        <div class="gallery-visual g7">💃</div>
+        <div class="gallery-overlay"><span>Zumba Dance Class</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="gym">
+        <div class="gallery-visual g8">💪</div>
+        <div class="gallery-overlay"><span>Functional Training Zone</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="wellness">
+        <div class="gallery-visual g9">🛁</div>
+        <div class="gallery-overlay"><span>Sauna & Recovery Suite</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="pool">
+        <div class="gallery-visual g10">🚣</div>
+        <div class="gallery-overlay"><span>Aqua Aerobics Session</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="events">
+        <div class="gallery-visual g11">🎖️</div>
+        <div class="gallery-overlay"><span>Inter-gym Competition 2024</span></div>
+      </div>
+
+      <div class="gallery-item" data-gcat="classes">
+        <div class="gallery-visual g12">🤸</div>
+        <div class="gallery-overlay"><span>CrossFit Training</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement and community since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">Cardio Zone</a></li>
+        <li><a href="#">Boxing &amp; MMA</a></li>
+        <li><a href="#">Yoga Classes</a></li>
+        <li><a href="#">Nutrition Coaching</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => { initLightbox(); });
+
+function filterGallery(btn, cat) {
+  document.querySelectorAll('.gfilter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    if (cat === 'all' || item.dataset.gcat === cat) {
+      item.style.display = '';
+      item.style.animation = 'fadeIn .4s ease';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
+<style>
+@keyframes fadeIn { from { opacity:0; transform:scale(.95); } to { opacity:1; transform:scale(1); } }
+</style>
+</body>
+</html>

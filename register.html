@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    [data-anim] { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    [data-anim].anim-in { opacity:1; transform:translateY(0); }
+    [data-anim][data-delay="1"] { transition-delay:.15s; }
+    [data-anim][data-delay="2"] { transition-delay:.3s; }
+
+    .register-layout {
+      display:grid;
+      grid-template-columns:1fr 1.8fr;
+      gap:2.5rem;
+      align-items:start;
+    }
+    @media(max-width:900px){ .register-layout { grid-template-columns:1fr; } }
+
+    .register-side { display:flex; flex-direction:column; gap:1.2rem; }
+    .benefit-item {
+      display:flex;
+      gap:1rem;
+      align-items:flex-start;
+      padding:1rem;
+      background:#1a1a1a;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.06);
+      transition:var(--transition);
+    }
+    .benefit-item:hover { border-color:rgba(230,57,70,.2); }
+    .benefit-icon { font-size:1.8rem; flex-shrink:0; }
+    .benefit-item h4 { color:var(--white); font-size:.92rem; margin-bottom:.2rem; }
+    .benefit-item p  { color:var(--gray); font-size:.83rem; }
+
+    .plan-select-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin-bottom:1rem; }
+    @media(max-width:500px){ .plan-select-grid { grid-template-columns:1fr; } }
+    .plan-option { display:none; }
+    .plan-label {
+      display:block;
+      text-align:center;
+      padding:1rem .5rem;
+      border:2px solid rgba(255,255,255,.1);
+      border-radius:10px;
+      cursor:pointer;
+      transition:var(--transition);
+      color:var(--gray);
+      font-size:.85rem;
+    }
+    .plan-label .plan-price-sm { display:block; font-size:1.3rem; font-weight:800; color:var(--white); margin:.3rem 0 .1rem; }
+    .plan-option:checked + .plan-label {
+      border-color:var(--primary);
+      background:rgba(230,57,70,.1);
+      color:var(--white);
+    }
+
+    .checkbox-group { display:flex; align-items:flex-start; gap:.75rem; margin-top:.5rem; }
+    .checkbox-group input[type="checkbox"] { width:16px; height:16px; margin-top:3px; accent-color:var(--primary); flex-shrink:0; }
+    .checkbox-group label { color:var(--gray); font-size:.85rem; cursor:pointer; }
+    .checkbox-group label a { color:var(--primary); }
+
+    .form-submit-btn {
+      background:var(--primary);
+      color:var(--white);
+      border:none;
+      padding:1rem;
+      border-radius:50px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      width:100%;
+      transition:var(--transition);
+      margin-top:.5rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+    }
+    .form-submit-btn:hover { background:#c1121f; transform:translateY(-2px); box-shadow:0 8px 24px rgba(230,57,70,.4); }
+
+    .step-indicator {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      margin-bottom:1.5rem;
+      flex-wrap:wrap;
+    }
+    .step {
+      display:flex;
+      align-items:center;
+      gap:.4rem;
+      font-size:.82rem;
+      color:var(--gray);
+    }
+    .step-num {
+      width:24px; height:24px;
+      border-radius:50%;
+      background:rgba(255,255,255,.1);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.75rem;
+      font-weight:700;
+    }
+    .step.active .step-num { background:var(--primary); color:#fff; }
+    .step.active { color:var(--white); }
+    .step-line { flex:1; height:1px; background:rgba(255,255,255,.1); min-width:20px; }
+
+    .session-options { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    @media(max-width:500px){ .session-options { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html"><span class="icon">🏋️</span>Power<span>Zone</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html">Q&amp;A</a></li>
+    <li><a href="register.html" class="active">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-content">
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Register <span>Online</span></h1>
+    <p>Join PowerZone in minutes — your transformation starts today</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Register</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="register-layout">
+
+      <!-- LEFT: Benefits -->
+      <div class="register-side" data-anim>
+        <div style="background:linear-gradient(135deg,#1a0608,#2a1010);border-radius:var(--radius);padding:1.5rem;border:1px solid rgba(230,57,70,.2);">
+          <h3 style="color:var(--white);font-size:1.1rem;margin-bottom:1rem;">🎁 Member Benefits</h3>
+          <div style="display:flex;flex-direction:column;gap:.7rem;">
+            <div class="benefit-item">
+              <span class="benefit-icon">🏋️</span>
+              <div><h4>Full Gym Access</h4><p>Unlimited access to all equipment and training zones.</p></div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">📱</span>
+              <div><h4>PowerZone App</h4><p>Track workouts, book classes, and monitor progress on the go.</p></div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">👤</span>
+              <div><h4>Personal Training</h4><p>Personalised fitness plan crafted by certified coaches.</p></div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">🥗</span>
+              <div><h4>Nutrition Support</h4><p>Dietitian-approved meal plans tailored to your goals.</p></div>
+            </div>
+            <div class="benefit-item">
+              <span class="benefit-icon">🏆</span>
+              <div><h4>Challenges &amp; Rewards</h4><p>Monthly fitness challenges with prizes for top performers.</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#1a1a1a;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.5rem;text-align:center;">
+          <div style="font-size:3rem;">📧</div>
+          <h4 style="color:var(--white);margin:.5rem 0 .3rem;">Email Confirmation</h4>
+          <p style="color:var(--gray);font-size:.85rem;">Upon registration, you'll receive a detailed welcome email with your membership ID, induction schedule, and first-week plan.</p>
+        </div>
+        <div style="background:#1a1a1a;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.2rem;text-align:center;">
+          <p style="color:var(--gray);font-size:.85rem;">Already registered?</p>
+          <a href="contact.html" style="color:var(--primary);font-weight:700;font-size:.9rem;">📞 Contact Support →</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Registration Form -->
+      <div data-anim data-delay="1">
+        <div class="form-wrapper">
+          <div style="margin-bottom:1.5rem;">
+            <h2 style="color:var(--white);font-size:1.7rem;font-weight:800;">Create Your <span style="color:var(--primary)">Account</span></h2>
+            <p style="color:var(--gray);font-size:.9rem;margin-top:.4rem;">Fill in your details below. Fields marked * are required.</p>
+          </div>
+
+          <div class="step-indicator">
+            <div class="step active"><div class="step-num">1</div> Personal Info</div>
+            <div class="step-line"></div>
+            <div class="step active"><div class="step-num">2</div> Choose Plan</div>
+            <div class="step-line"></div>
+            <div class="step active"><div class="step-num">3</div> Preferences</div>
+          </div>
+
+          <form id="registerForm" onsubmit="handleRegisterForm(event)" novalidate>
+            <!-- Section 1: Personal -->
+            <p style="color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.75rem;">👤 Personal Information</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" placeholder="e.g. Rahul" required autocomplete="given-name">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" placeholder="e.g. Sharma" required autocomplete="family-name">
+              </div>
+              <div class="form-group">
+                <label for="regEmail">Email Address *</label>
+                <input type="email" id="regEmail" name="email" placeholder="you@email.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="regPhone">Mobile Number *</label>
+                <input type="tel" id="regPhone" name="phone" placeholder="+91 XXXXX XXXXX" required autocomplete="tel">
+              </div>
+              <div class="form-group">
+                <label for="dob">Date of Birth *</label>
+                <input type="date" id="dob" name="dob" required>
+              </div>
+              <div class="form-group">
+                <label for="gender">Gender *</label>
+                <select id="gender" name="gender" required>
+                  <option value="" disabled selected>Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Non-binary</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Your full address" autocomplete="street-address">
+              </div>
+              <div class="form-group">
+                <label for="city">City *</label>
+                <input type="text" id="city" name="city" placeholder="e.g. Pune" required autocomplete="address-level2">
+              </div>
+              <div class="form-group">
+                <label for="country">Country *</label>
+                <select id="country" name="country" required>
+                  <option value="" disabled selected>Select country</option>
+                  <option>🇮🇳 India</option>
+                  <option>🇺🇸 United States</option>
+                  <option>🇬🇧 United Kingdom</option>
+                  <option>🇨🇦 Canada</option>
+                  <option>🇦🇺 Australia</option>
+                  <option>🇦🇪 UAE</option>
+                  <option>🇸🇬 Singapore</option>
+                  <option>🌍 Other</option>
+                </select>
+              </div>
+            </div>
+
+            <br>
+            <!-- Section 2: Plan -->
+            <p style="color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.75rem;">🏅 Membership Plan *</p>
+            <div class="plan-select-grid">
+              <div>
+                <input type="radio" name="plan" id="planBasic" value="Basic" class="plan-option" required>
+                <label class="plan-label" for="planBasic">
+                  Basic
+                  <span class="plan-price-sm">₹999</span>
+                  /month
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="plan" id="planPro" value="Pro" class="plan-option">
+                <label class="plan-label" for="planPro">
+                  Pro
+                  <span class="plan-price-sm">₹1,999</span>
+                  /month
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="plan" id="planElite" value="Elite" class="plan-option">
+                <label class="plan-label" for="planElite">
+                  Elite
+                  <span class="plan-price-sm">₹3,499</span>
+                  /month
+                </label>
+              </div>
+            </div>
+
+            <br>
+            <!-- Section 3: Preferences -->
+            <p style="color:var(--primary);font-size:.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.75rem;">⚙️ Preferences & Goals</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="goal">Primary Fitness Goal *</label>
+                <select id="goal" name="goal" required>
+                  <option value="" disabled selected>Select your goal</option>
+                  <option>Weight Loss</option>
+                  <option>Muscle Gain</option>
+                  <option>Improve Endurance</option>
+                  <option>Stay Active & Healthy</option>
+                  <option>Flexibility & Mobility</option>
+                  <option>Sports Performance</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="experience">Fitness Experience *</label>
+                <select id="experience" name="experience" required>
+                  <option value="" disabled selected>Select level</option>
+                  <option>Beginner (0–6 months)</option>
+                  <option>Intermediate (6m–2 years)</option>
+                  <option>Advanced (2+ years)</option>
+                  <option>Professional Athlete</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Preferred Training Times</label>
+                <div class="session-options">
+                  <label style="display:flex;gap:.5rem;align-items:center;color:var(--gray);font-size:.88rem;cursor:pointer;">
+                    <input type="checkbox" name="time" value="early-morning" style="accent-color:var(--primary)"> 🌅 Early Morning (5–8 AM)
+                  </label>
+                  <label style="display:flex;gap:.5rem;align-items:center;color:var(--gray);font-size:.88rem;cursor:pointer;">
+                    <input type="checkbox" name="time" value="morning" style="accent-color:var(--primary)"> ☀️ Morning (8–12 PM)
+                  </label>
+                  <label style="display:flex;gap:.5rem;align-items:center;color:var(--gray);font-size:.88rem;cursor:pointer;">
+                    <input type="checkbox" name="time" value="afternoon" style="accent-color:var(--primary)"> 🌤️ Afternoon (12–5 PM)
+                  </label>
+                  <label style="display:flex;gap:.5rem;align-items:center;color:var(--gray);font-size:.88rem;cursor:pointer;">
+                    <input type="checkbox" name="time" value="evening" style="accent-color:var(--primary)"> 🌆 Evening (5–11 PM)
+                  </label>
+                </div>
+              </div>
+              <div class="form-group full">
+                <label for="health">Any Health Conditions or Injuries?</label>
+                <textarea id="health" name="health" placeholder="e.g. Lower back pain, knee injury... (leave blank if none)" style="min-height:80px;"></textarea>
+              </div>
+            </div>
+
+            <br>
+            <div class="checkbox-group">
+              <input type="checkbox" id="terms" name="terms" required>
+              <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a> of PowerZone Fitness Club. *</label>
+            </div>
+            <div class="checkbox-group" style="margin-top:.5rem;">
+              <input type="checkbox" id="newsletter" name="newsletter">
+              <label for="newsletter">Subscribe to our newsletter for fitness tips, offers, and updates.</label>
+            </div>
+
+            <button type="submit" class="form-submit-btn" style="margin-top:1.5rem;">
+              🚀 Complete Registration &amp; Get Welcome Email
+            </button>
+            <p style="text-align:center;color:var(--gray);font-size:.78rem;margin-top:.75rem;">🔒 Your data is encrypted and securely handled</p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement and community since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">Cardio Zone</a></li>
+        <li><a href="#">Boxing &amp; MMA</a></li>
+        <li><a href="#">Yoga Classes</a></li>
+        <li><a href="#">Nutrition Coaching</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

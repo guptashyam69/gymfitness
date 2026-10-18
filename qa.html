@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q&amp;A Forum — PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    [data-anim] { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    [data-anim].anim-in { opacity:1; transform:translateY(0); }
+
+    .qa-layout {
+      display:grid;
+      grid-template-columns:1fr 320px;
+      gap:2rem;
+      align-items:start;
+    }
+    @media(max-width:900px){ .qa-layout { grid-template-columns:1fr; } }
+
+    .qa-sidebar { display:flex; flex-direction:column; gap:1.2rem; }
+    .sidebar-card {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      padding:1.5rem;
+    }
+    .sidebar-card h3 { color:var(--white); font-size:1rem; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:.5rem; }
+    .tag-cloud { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .tag-pill {
+      background:rgba(230,57,70,.12);
+      color:var(--primary);
+      padding:.25rem .8rem;
+      border-radius:50px;
+      font-size:.8rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:var(--transition);
+      border:1px solid rgba(230,57,70,.2);
+    }
+    .tag-pill:hover { background:var(--primary); color:var(--white); }
+
+    .top-contributor { display:flex; align-items:center; gap:.75rem; padding:.6rem 0; border-bottom:1px solid rgba(255,255,255,.05); }
+    .top-contributor:last-child { border-bottom:none; }
+    .contributor-avatar { font-size:1.8rem; }
+    .contributor-info h5 { color:var(--white); font-size:.88rem; }
+    .contributor-info p  { color:var(--gray); font-size:.75rem; }
+    .contributor-count { margin-left:auto; color:var(--primary); font-weight:700; font-size:.88rem; }
+
+    .filter-tabs { display:flex; gap:.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .filter-tab {
+      padding:.4rem 1rem;
+      border-radius:50px;
+      font-size:.85rem;
+      font-weight:600;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.1);
+      color:var(--gray);
+      background:none;
+      transition:var(--transition);
+    }
+    .filter-tab.active,
+    .filter-tab:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+
+    .no-results {
+      text-align:center;
+      padding:3rem 1rem;
+      color:var(--gray);
+      display:none;
+    }
+    .no-results.show { display:block; }
+    .no-results span { font-size:3rem; display:block; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html"><span class="icon">🏋️</span>Power<span>Zone</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html" class="active">Q&amp;A</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-content">
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Q&amp;A <span>Forum</span></h1>
+    <p>Ask questions, share knowledge, grow together</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Q&amp;A Forum</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Animated Search Bar -->
+    <div class="search-bar-wrap" data-anim>
+      <input type="text" class="search-input" placeholder="🔍  Search questions about fitness, nutrition, workouts..." id="qaSearch">
+      <button class="search-btn-anim" aria-label="Search" onclick="doSearch()">🔍</button>
+    </div>
+    <div class="no-results" id="noResults">
+      <span>🔍</span>
+      <p>No questions match your search. Try different keywords!</p>
+    </div>
+
+    <div class="qa-layout">
+      <!-- MAIN Q&A -->
+      <div>
+        <!-- Ask Form -->
+        <div class="ask-form-card" data-anim>
+          <h3>💬 Ask a Question</h3>
+          <form id="askForm" onsubmit="handleAskForm(event)" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="aName">Your Name *</label>
+                <input type="text" id="aName" name="name" placeholder="e.g. Rahul Sharma" required>
+              </div>
+              <div class="form-group">
+                <label for="aTag">Category *</label>
+                <select id="aTag" name="tag" required>
+                  <option value="" disabled selected>Select category</option>
+                  <option>Workout Tips</option>
+                  <option>Nutrition</option>
+                  <option>Weight Loss</option>
+                  <option>Muscle Gain</option>
+                  <option>Yoga & Flexibility</option>
+                  <option>Supplements</option>
+                  <option>Recovery</option>
+                  <option>General</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label for="aQuestion">Your Question *</label>
+                <input type="text" id="aQuestion" name="question" placeholder="e.g. How many days per week should I train for muscle gain?" required>
+              </div>
+            </div>
+            <br>
+            <button type="submit" style="background:var(--primary);color:#fff;border:none;padding:.75rem 2rem;border-radius:50px;font-weight:700;cursor:pointer;font-size:.95rem;transition:var(--transition);" onmouseover="this.style.background='#c1121f'" onmouseout="this.style.background='var(--primary)'">
+              📤 Post Question
+            </button>
+          </form>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterQA(this,'all')">All Questions</button>
+          <button class="filter-tab" onclick="filterQA(this,'Workout Tips')">💪 Workout Tips</button>
+          <button class="filter-tab" onclick="filterQA(this,'Nutrition')">🥗 Nutrition</button>
+          <button class="filter-tab" onclick="filterQA(this,'Weight Loss')">⚖️ Weight Loss</button>
+          <button class="filter-tab" onclick="filterQA(this,'Muscle Gain')">🏋️ Muscle Gain</button>
+          <button class="filter-tab" onclick="filterQA(this,'Recovery')">🛌 Recovery</button>
+        </div>
+
+        <!-- Q&A List -->
+        <div class="qa-list" id="qaList">
+
+          <div class="qa-card" data-cat="Muscle Gain">
+            <div class="qa-meta">
+              <span class="author">👤 Arjun M.</span>
+              <span class="date">2 days ago</span>
+              <span class="tag">Muscle Gain</span>
+            </div>
+            <h4>How many protein grams per kg of body weight should I consume to build muscle?</h4>
+            <p>I'm 75 kg and trying to build lean muscle. What's the optimal daily protein intake?</p>
+            <div class="qa-actions">
+              <button class="qa-action-btn" onclick="likeQA(this)">👍 Like <span class="like-count">24</span></button>
+              <button class="qa-action-btn" onclick="toggleAnswer(this)">▼ Show Answer</button>
+            </div>
+            <div class="qa-answer">
+              <p>For muscle building, aim for <strong style="color:var(--primary)">1.6–2.2g of protein per kg of body weight</strong> daily. For you at 75 kg, that's 120–165g/day. Distribute this across 4–5 meals. Lean sources like chicken, eggs, paneer, legumes, and whey protein are excellent choices. Consistency over weeks matters more than hitting the exact number on any single day.</p>
+            </div>
+          </div>
+
+          <div class="qa-card" data-cat="Weight Loss">
+            <div class="qa-meta">
+              <span class="author">👤 Priya K.</span>
+              <span class="date">4 days ago</span>
+              <span class="tag">Weight Loss</span>
+            </div>
+            <h4>Should I do cardio before or after weights for fat loss?</h4>
+            <p>I want to lose fat but preserve muscle. Does the order of cardio and weights matter?</p>
+            <div class="qa-actions">
+              <button class="qa-action-btn" onclick="likeQA(this)">👍 Like <span class="like-count">18</span></button>
+              <button class="qa-action-btn" onclick="toggleAnswer(this)">▼ Show Answer</button>
+            </div>
+            <div class="qa-answer">
+              <p>For fat loss with muscle preservation, do <strong style="color:var(--primary)">weights first, then cardio</strong>. Strength training depletes glycogen stores, so your subsequent cardio session burns more fat. If your goal is purely cardiovascular endurance, reverse the order. Keep cardio sessions at moderate intensity (60–70% max heart rate) for 20–30 mins post-lifting for best fat-burning results.</p>
+            </div>
+          </div>
+
+          <div class="qa-card" data-cat="Workout Tips">
+            <div class="qa-meta">
+              <span class="author">👤 Rohit S.</span>
+              <span class="date">1 week ago</span>
+              <span class="tag">Workout Tips</span>
+            </div>
+            <h4>How do I fix muscle imbalances between my left and right side?</h4>
+            <p>My right arm is noticeably bigger than my left. How should I address this?</p>
+            <div class="qa-actions">
+              <button class="qa-action-btn" onclick="likeQA(this)">👍 Like <span class="like-count">31</span></button>
+              <button class="qa-action-btn" onclick="toggleAnswer(this)">▼ Show Answer</button>
+            </div>
+            <div class="qa-answer">
+              <p>Switch to <strong style="color:var(--primary)">unilateral (single-limb) exercises</strong> like dumbbell curls, single-arm rows, and single-leg lunges. Always start with your weaker side and match the same reps on your stronger side. Avoid using the stronger side to compensate. Give it 8–12 weeks of consistent training — imbalances typically resolve naturally with unilateral focus. Don't neglect sleep and nutrition either.</p>
+            </div>
+          </div>
+
+          <div class="qa-card" data-cat="Nutrition">
+            <div class="qa-meta">
+              <span class="author">👤 Sneha T.</span>
+              <span class="date">1 week ago</span>
+              <span class="tag">Nutrition</span>
+            </div>
+            <h4>What should I eat before a morning workout on an empty stomach?</h4>
+            <p>I train at 6 AM and I'm not sure if I should eat before or work out fasted.</p>
+            <div class="qa-actions">
+              <button class="qa-action-btn" onclick="likeQA(this)">👍 Like <span class="like-count">15</span></button>
+              <button class="qa-action-btn" onclick="toggleAnswer(this)">▼ Show Answer</button>
+            </div>
+            <div class="qa-answer">
+              <p>For sessions under 60 minutes, fasted training can work well for fat burning. If you prefer to fuel up, have something <strong style="color:var(--primary)">light 30–45 minutes before</strong> — a banana with peanut butter, a small bowl of oats, or a protein shake. Avoid heavy meals. Post-workout, prioritise protein + carbs within 60 minutes to aid recovery.</p>
+            </div>
+          </div>
+
+          <div class="qa-card" data-cat="Recovery">
+            <div class="qa-meta">
+              <span class="author">👤 Vikram D.</span>
+              <span class="date">10 days ago</span>
+              <span class="tag">Recovery</span>
+            </div>
+            <h4>How do I reduce DOMS (delayed onset muscle soreness) after intense workouts?</h4>
+            <p>My legs are extremely sore 2 days after leg day. Is this normal? How can I speed up recovery?</p>
+            <div class="qa-actions">
+              <button class="qa-action-btn" onclick="likeQA(this)">👍 Like <span class="like-count">42</span></button>
+              <button class="qa-action-btn" onclick="toggleAnswer(this)">▼ Show Answer</button>
+            </div>
+            <div class="qa-answer">
+              <p>DOMS is completely normal — it peaks 24–48 hours post-workout. To reduce it: <strong style="color:var(--primary)">active recovery</strong> (light walk, cycling), cold showers or ice baths, foam rolling / massage, adequate sleep (7–9 hrs), and stay hydrated. Eating anti-inflammatory foods (berries, turmeric, omega-3s) also helps. Don't skip the next workout — light movement accelerates recovery.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="qa-sidebar">
+        <div class="sidebar-card">
+          <h3>🏷️ Browse by Tag</h3>
+          <div class="tag-cloud">
+            <span class="tag-pill" onclick="filterByTag('Workout Tips')">💪 Workout Tips</span>
+            <span class="tag-pill" onclick="filterByTag('Nutrition')">🥗 Nutrition</span>
+            <span class="tag-pill" onclick="filterByTag('Weight Loss')">⚖️ Weight Loss</span>
+            <span class="tag-pill" onclick="filterByTag('Muscle Gain')">🏋️ Muscle Gain</span>
+            <span class="tag-pill" onclick="filterByTag('Yoga & Flexibility')">🧘 Yoga</span>
+            <span class="tag-pill" onclick="filterByTag('Supplements')">💊 Supplements</span>
+            <span class="tag-pill" onclick="filterByTag('Recovery')">🛌 Recovery</span>
+            <span class="tag-pill" onclick="filterByTag('General')">💬 General</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>🏆 Top Contributors</h3>
+          <div class="top-contributor">
+            <span class="contributor-avatar">👨‍🔬</span>
+            <div class="contributor-info"><h5>Coach Rohit</h5><p>Certified Strength Coach</p></div>
+            <span class="contributor-count">142 ans</span>
+          </div>
+          <div class="top-contributor">
+            <span class="contributor-avatar">👩‍⚕️</span>
+            <div class="contributor-info"><h5>Dr. Priya</h5><p>Dietitian & Nutritionist</p></div>
+            <span class="contributor-count">98 ans</span>
+          </div>
+          <div class="top-contributor">
+            <span class="contributor-avatar">🧘</span>
+            <div class="contributor-info"><h5>Ananya Desai</h5><p>Yoga Instructor</p></div>
+            <span class="contributor-count">76 ans</span>
+          </div>
+          <div class="top-contributor">
+            <span class="contributor-avatar">🏊</span>
+            <div class="contributor-info"><h5>Coach Meera</h5><p>Aqua Fitness Expert</p></div>
+            <span class="contributor-count">54 ans</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>📊 Forum Stats</h3>
+          <div style="display:flex;flex-direction:column;gap:.6rem;">
+            <div style="display:flex;justify-content:space-between;color:var(--gray);font-size:.88rem;">
+              <span>Total Questions</span><strong style="color:var(--white)">1,247</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:var(--gray);font-size:.88rem;">
+              <span>Answers Given</span><strong style="color:var(--white)">4,892</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:var(--gray);font-size:.88rem;">
+              <span>Active Members</span><strong style="color:var(--white)">3,201</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:var(--gray);font-size:.88rem;">
+              <span>This Month</span><strong style="color:var(--primary)">89 new Q's</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;padding:1.5rem;background:linear-gradient(135deg,#1a0608,#2a1010);border-radius:var(--radius);border:1px solid rgba(230,57,70,.2);">
+          <div style="font-size:2.5rem;margin-bottom:.5rem;">🏋️</div>
+          <h4 style="color:var(--white);margin-bottom:.4rem;">Join PowerZone</h4>
+          <p style="color:var(--gray);font-size:.82rem;margin-bottom:1rem;">Get unlimited access to expert coaching and premium facilities.</p>
+          <a href="register.html" class="btn btn-primary" style="font-size:.85rem;padding:.6rem 1.5rem;">Register Now</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement and community since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">Cardio Zone</a></li>
+        <li><a href="#">Boxing &amp; MMA</a></li>
+        <li><a href="#">Yoga Classes</a></li>
+        <li><a href="#">Nutrition Coaching</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  initQASearch();
+});
+
+function doSearch() {
+  const q = document.getElementById('qaSearch').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.qa-card');
+  let shown = 0;
+  cards.forEach(c => {
+    const match = c.textContent.toLowerCase().includes(q);
+    c.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  document.getElementById('noResults').classList.toggle('show', shown === 0);
+}
+
+function filterQA(btn, cat) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.qa-card');
+  cards.forEach(c => {
+    if (cat === 'all' || c.dataset.cat === cat) c.style.display = '';
+    else c.style.display = 'none';
+  });
+  document.getElementById('noResults').classList.remove('show');
+}
+
+function filterByTag(tag) {
+  const cards = document.querySelectorAll('.qa-card');
+  cards.forEach(c => {
+    if (c.dataset.cat === tag) c.style.display = '';
+    else c.style.display = 'none';
+  });
+  document.querySelector('.filter-tab.active')?.classList.remove('active');
+}
+
+// Real-time search on Enter
+document.getElementById('qaSearch')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+document.getElementById('qaSearch')?.addEventListener('input', () => {
+  if (!document.getElementById('qaSearch').value) {
+    document.querySelectorAll('.qa-card').forEach(c => c.style.display = '');
+    document.getElementById('noResults').classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>

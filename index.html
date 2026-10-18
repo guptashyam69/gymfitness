@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Inline animation helpers */
+    [data-anim] { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    [data-anim].anim-in { opacity: 1; transform: translateY(0); }
+    [data-anim][data-delay="1"] { transition-delay: 0.1s; }
+    [data-anim][data-delay="2"] { transition-delay: 0.2s; }
+    [data-anim][data-delay="3"] { transition-delay: 0.3s; }
+    [data-anim][data-delay="4"] { transition-delay: 0.4s; }
+    [data-anim][data-delay="5"] { transition-delay: 0.5s; }
+
+    /* Slide backgrounds using gradients + emoji visuals */
+    .slide-1 { background: linear-gradient(135deg, #0a0a0a 0%, #1a0608 60%, #0d0d0d 100%); }
+    .slide-2 { background: linear-gradient(135deg, #020a1a 0%, #0d1f3c 60%, #020a1a 100%); }
+    .slide-3 { background: linear-gradient(135deg, #080a04 0%, #1a2208 60%, #080a04 100%); }
+
+    .slide-visual {
+      position: absolute;
+      font-size: clamp(8rem, 20vw, 18rem);
+      opacity: 0.08;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+
+    /* Timeline (About preview) */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+    .timeline-item { position: relative; margin-bottom: 1.5rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem; top: 0.4rem;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--dark);
+    }
+    .timeline-item h4 { color: var(--white); font-size: 0.95rem; }
+    .timeline-item p { color: var(--gray); font-size: 0.85rem; }
+
+    /* CTA section */
+    .cta-section {
+      background: linear-gradient(135deg, #1a0608, #0d0d0d);
+      border-top: 1px solid rgba(230,57,70,0.2);
+      border-bottom: 1px solid rgba(230,57,70,0.2);
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 3rem); color: var(--white); font-weight: 900; margin-bottom: 1rem; }
+    .cta-section p { color: var(--gray); font-size: 1.05rem; margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">
+    <span class="icon">🏋️</span>
+    Power<span>Zone</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html">Q&amp;A</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+
+  <div class="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ===== HERO SLIDER ===== -->
+<div class="page-content">
+<section class="hero">
+  <div class="slides">
+
+    <!-- Slide 1 -->
+    <div class="slide slide-1 active">
+      <div class="slide-visual">🏋️</div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <span class="badge">Welcome to PowerZone</span>
+        <h1>Unleash Your <span>Inner Beast</span></h1>
+        <p>State-of-the-art equipment, expert trainers, and a community that pushes you further every day.</p>
+        <div class="hero-btns">
+          <a href="register.html" class="btn btn-primary">🚀 Join Now</a>
+          <a href="about.html"    class="btn btn-outline">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide slide-2">
+      <div class="slide-visual">🥊</div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <span class="badge">Premium Classes</span>
+        <h1>Train Like a <span>Champion</span></h1>
+        <p>From HIIT and Boxing to Yoga and CrossFit — we have 50+ classes designed for every fitness level.</p>
+        <div class="hero-btns">
+          <a href="gallery.html"  class="btn btn-primary">🏅 View Classes</a>
+          <a href="contact.html"  class="btn btn-outline">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide slide-3">
+      <div class="slide-visual">🧘</div>
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <span class="badge">Mind &amp; Body</span>
+        <h1>Find Your <span>Balance</span></h1>
+        <p>Wellness is more than muscle. Explore our mindfulness programs, nutrition plans, and recovery suites.</p>
+        <div class="hero-btns">
+          <a href="register.html" class="btn btn-primary">🌿 Start Today</a>
+          <a href="multimedia.html" class="btn btn-outline">Watch Videos</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="slide-arrow prev" aria-label="Previous slide">&#8592;</button>
+  <button class="slide-arrow next" aria-label="Next slide">&#8594;</button>
+
+  <div class="slide-controls">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<section class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item" data-anim>
+      <h3 class="count-up" data-target="5000" data-suffix="+">5000+</h3>
+      <p>Active Members</p>
+    </div>
+    <div class="stat-item" data-anim data-delay="1">
+      <h3 class="count-up" data-target="50" data-suffix="+">50+</h3>
+      <p>Weekly Classes</p>
+    </div>
+    <div class="stat-item" data-anim data-delay="2">
+      <h3 class="count-up" data-target="25" data-suffix="">25</h3>
+      <p>Expert Trainers</p>
+    </div>
+    <div class="stat-item" data-anim data-delay="3">
+      <h3 class="count-up" data-target="10" data-suffix=" Yrs">10 Yrs</h3>
+      <p>Of Excellence</p>
+    </div>
+    <div class="stat-item" data-anim data-delay="4">
+      <h3 class="count-up" data-target="98" data-suffix="%">98%</h3>
+      <p>Happy Members</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES SECTION ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">What We Offer</span>
+      <h2>World-Class <span>Services</span></h2>
+      <p>Every program crafted to help you reach your peak performance faster.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-anim>
+        <span class="service-icon">🏋️</span>
+        <h3>Strength Training</h3>
+        <p>Fully-equipped weight floor with free weights, machines, and power racks for every level.</p>
+      </div>
+      <div class="service-card" data-anim data-delay="1">
+        <span class="service-icon">🏃</span>
+        <h3>Cardio Zone</h3>
+        <p>Treadmills, bikes, ellipticals, and rowing machines with built-in entertainment systems.</p>
+      </div>
+      <div class="service-card" data-anim data-delay="2">
+        <span class="service-icon">🥊</span>
+        <h3>Boxing & MMA</h3>
+        <p>Certified combat sport coaches offering boxing, kickboxing, and mixed martial arts classes.</p>
+      </div>
+      <div class="service-card" data-anim data-delay="3">
+        <span class="service-icon">🧘</span>
+        <h3>Yoga & Mindfulness</h3>
+        <p>Tranquil studios for Hatha, Vinyasa, Power Yoga, and guided meditation sessions.</p>
+      </div>
+      <div class="service-card" data-anim data-delay="4">
+        <span class="service-icon">🏊</span>
+        <h3>Aqua Fitness</h3>
+        <p>Olympic-size heated pool with lap swimming, aqua aerobics, and swimming lessons.</p>
+      </div>
+      <div class="service-card" data-anim data-delay="5">
+        <span class="service-icon">🥗</span>
+        <h3>Nutrition Coaching</h3>
+        <p>Registered dietitians create personalised meal and supplement plans to accelerate results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MEMBERSHIP PLANS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Membership Plans</span>
+      <h2>Choose Your <span>Plan</span></h2>
+      <p>Flexible plans with no hidden fees. Cancel anytime.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="membership-grid">
+      <!-- Basic -->
+      <div class="membership-card" data-anim>
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">₹<strong>999</strong><span>/mo</span></div>
+        <ul class="plan-features">
+          <li>Gym Floor Access</li>
+          <li>Cardio Zone</li>
+          <li>2 Group Classes/Month</li>
+          <li>Locker Room</li>
+        </ul>
+        <a href="register.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+      </div>
+      <!-- Pro -->
+      <div class="membership-card featured" data-anim data-delay="1">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">₹<strong>1,999</strong><span>/mo</span></div>
+        <ul class="plan-features">
+          <li>Everything in Basic</li>
+          <li>Unlimited Group Classes</li>
+          <li>1 PT Session/Month</li>
+          <li>Nutrition Consultation</li>
+          <li>Pool Access</li>
+        </ul>
+        <a href="register.html" class="btn btn-primary" style="width:100%;justify-content:center;">Join Now</a>
+      </div>
+      <!-- Elite -->
+      <div class="membership-card" data-anim data-delay="2">
+        <div class="plan-name">Elite</div>
+        <div class="plan-price">₹<strong>3,499</strong><span>/mo</span></div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Unlimited PT Sessions</li>
+          <li>Monthly Body Analysis</li>
+          <li>Sauna &amp; Spa Access</li>
+          <li>Priority Class Booking</li>
+          <li>Guest Passes (2/mo)</li>
+        </ul>
+        <a href="register.html" class="btn btn-accent" style="width:100%;justify-content:center;">Go Elite</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT PREVIEW ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-wrap" data-anim>
+        <div style="background:linear-gradient(135deg,#1a0608,#2a1015);border-radius:12px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:8rem;">💪</div>
+        <div class="about-badge">
+          <strong>2014</strong>
+          Founded
+        </div>
+      </div>
+      <div class="about-text" data-anim data-delay="2">
+        <span class="label">Our Story</span>
+        <h2>Built by Athletes, <span>For Everyone</span></h2>
+        <p>PowerZone was born in 2014 with a single dumbbell rack and a dream. Today, we're one of India's fastest-growing fitness chains with 12 branches and a community of 60,000+ members.</p>
+        <p>Our philosophy is simple: every body deserves world-class fitness. Whether you're a complete beginner or a seasoned athlete, our doors are open.</p>
+        <div class="timeline">
+          <div class="timeline-item"><h4>2014 — Founded</h4><p>Opened our first 2,000 sqft facility in Pune.</p></div>
+          <div class="timeline-item"><h4>2017 — Expansion</h4><p>Grew to 5 branches across Maharashtra.</p></div>
+          <div class="timeline-item"><h4>2020 — Digital Launch</h4><p>Launched online classes during the pandemic, reaching 20k members.</p></div>
+          <div class="timeline-item"><h4>2024 — Nation-wide</h4><p>Now present in 8 cities with 60,000+ members and counting.</p></div>
+        </div>
+        <br>
+        <a href="about.html" class="btn btn-primary">Read More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA SECTION ===== -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to Transform Your Life?</h2>
+    <p>Join thousands who have already changed their bodies, their minds, and their futures at PowerZone.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="register.html" class="btn btn-primary">🚀 Register Now — It's Free!</a>
+      <a href="contact.html"  class="btn btn-outline">💬 Talk to Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement, community, and science-backed coaching since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#" title="Instagram">📸</a>
+        <a class="social-btn" href="#" title="Facebook">📘</a>
+        <a class="social-btn" href="#" title="YouTube">▶️</a>
+        <a class="social-btn" href="#" title="Twitter">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">Cardio Zone</a></li>
+        <li><a href="#">Boxing &amp; MMA</a></li>
+        <li><a href="#">Yoga Classes</a></li>
+        <li><a href="#">Nutrition Coaching</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

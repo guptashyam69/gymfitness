@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    [data-anim] { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    [data-anim].anim-in { opacity:1; transform:translateY(0); }
+    [data-anim][data-delay="1"] { transition-delay:.15s; }
+    [data-anim][data-delay="2"] { transition-delay:.3s; }
+    [data-anim][data-delay="3"] { transition-delay:.45s; }
+
+    .values-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; }
+    .value-card {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--radius);
+      padding:1.8rem;
+      text-align:center;
+      transition:var(--transition);
+    }
+    .value-card:hover { border-color:rgba(230,57,70,.3); transform:translateY(-4px); }
+    .value-card .icon { font-size:2.5rem; margin-bottom:1rem; }
+    .value-card h3 { color:var(--white); margin-bottom:.4rem; }
+    .value-card p { color:var(--gray); font-size:.88rem; }
+
+    .full-timeline { position:relative; padding:0 2rem; }
+    .full-timeline::before {
+      content:'';
+      position:absolute;
+      left:50%; top:0; bottom:0;
+      width:2px;
+      background:linear-gradient(to bottom, var(--primary), transparent);
+      transform:translateX(-50%);
+    }
+    .tl-item {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:2rem;
+      margin-bottom:2.5rem;
+      position:relative;
+    }
+    .tl-item::before {
+      content:'';
+      position:absolute;
+      left:50%; top:1.2rem;
+      width:14px; height:14px;
+      border-radius:50%;
+      background:var(--primary);
+      transform:translateX(-50%);
+      border:3px solid var(--dark);
+      z-index:1;
+    }
+    .tl-content {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      padding:1.5rem;
+    }
+    .tl-item.right .tl-content { grid-column:2; }
+    .tl-item.left  .tl-content { grid-column:1; }
+    .tl-year { color:var(--primary); font-weight:800; font-size:.85rem; letter-spacing:1px; margin-bottom:.3rem; }
+    .tl-content h4 { color:var(--white); margin-bottom:.4rem; }
+    .tl-content p { color:var(--gray); font-size:.88rem; }
+
+    @media(max-width:768px){
+      .full-timeline::before { left:1rem; }
+      .tl-item { grid-template-columns:1fr; padding-left:2.5rem; }
+      .tl-item::before { left:1rem; }
+      .tl-item.right .tl-content,
+      .tl-item.left  .tl-content { grid-column:1; }
+    }
+
+    /* Testimonials */
+    .testimonials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; }
+    .testimonial-card {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--radius);
+      padding:1.8rem;
+      transition:var(--transition);
+    }
+    .testimonial-card:hover { border-color:rgba(230,57,70,.2); transform:translateY(-4px); }
+    .stars { color:#f4a261; font-size:1rem; margin-bottom:.75rem; }
+    .testimonial-text { color:#bbb; font-size:.92rem; font-style:italic; margin-bottom:1rem; line-height:1.7; }
+    .testimonial-author { display:flex; align-items:center; gap:.75rem; }
+    .author-avatar { font-size:2.2rem; }
+    .author-info h5 { color:var(--white); font-size:.92rem; }
+    .author-info p  { color:var(--gray); font-size:.78rem; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html"><span class="icon">🏋️</span>Power<span>Zone</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html" class="active">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html">Q&amp;A</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-content">
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>About <span>PowerZone</span></h1>
+    <p>Our mission, vision, history, and the team behind the sweat</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>About Us</span></div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-wrap" data-anim>
+        <div style="background:linear-gradient(135deg,#1a0608,#2a1015);border-radius:12px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:9rem;line-height:1;">💪</div>
+        <div class="about-badge"><strong>10+</strong> Years of Passion</div>
+      </div>
+      <div class="about-text" data-anim data-delay="2">
+        <span class="label">Who We Are</span>
+        <h2>More Than a Gym — <span>A Lifestyle</span></h2>
+        <p>PowerZone Fitness Club was founded in 2014 by a team of certified athletes and wellness coaches with one mission: make world-class fitness accessible to everyone. What started as a small 2,000 sqft studio in Pune's Shivaji Nagar has grown into a nationwide network of premium fitness centres.</p>
+        <p>We believe fitness isn't a destination — it's a daily journey. Our holistic approach combines cutting-edge equipment, evidence-based programs, certified trainers, and a vibrant community that celebrates every milestone.</p>
+        <p>From beginners nervous about their first workout, to competitive athletes chasing podium finishes — PowerZone is built for you.</p>
+        <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <a href="register.html" class="btn btn-primary">🚀 Join Today</a>
+          <a href="contact.html"  class="btn btn-outline">💬 Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION / VISION / HISTORY -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Our Pillars</span>
+      <h2>Mission, Vision &amp; <span>Values</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="mvh-grid">
+      <div class="mvh-card" data-anim>
+        <div class="mvh-icon">🎯</div>
+        <h3>Mission</h3>
+        <p>To inspire and empower individuals of all fitness levels to live healthier, happier lives through expert guidance, inclusive communities, and premium facilities.</p>
+      </div>
+      <div class="mvh-card" data-anim data-delay="1">
+        <div class="mvh-icon">🔭</div>
+        <h3>Vision</h3>
+        <p>To be India's most trusted fitness brand — a place where science meets soul, and every member achieves their personal best.</p>
+      </div>
+      <div class="mvh-card" data-anim data-delay="2">
+        <div class="mvh-icon">📖</div>
+        <h3>History</h3>
+        <p>Born in 2014 from a single studio, PowerZone has grown to 12 branches across 8 cities, serving 60,000+ members with a team of 300+ wellness professionals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE VALUES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">What Drives Us</span>
+      <h2>Our Core <span>Values</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="values-grid">
+      <div class="value-card" data-anim>
+        <div class="icon">🤝</div>
+        <h3>Community</h3>
+        <p>We grow stronger together. Our inclusive culture welcomes everyone regardless of age, shape, or ability.</p>
+      </div>
+      <div class="value-card" data-anim data-delay="1">
+        <div class="icon">🔬</div>
+        <h3>Science-Backed</h3>
+        <p>Every program is designed by certified experts using the latest exercise science and nutrition research.</p>
+      </div>
+      <div class="value-card" data-anim data-delay="2">
+        <div class="icon">🌱</div>
+        <h3>Sustainability</h3>
+        <p>From eco-friendly equipment to plant-based café options, we care for the planet as much as your health.</p>
+      </div>
+      <div class="value-card" data-anim data-delay="3">
+        <div class="icon">⭐</div>
+        <h3>Excellence</h3>
+        <p>We never settle for good enough. Our facilities, trainers, and service standards set the industry benchmark.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE / HISTORY -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Our Journey</span>
+      <h2>A Decade of <span>Growth</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="full-timeline" data-anim>
+      <div class="tl-item left">
+        <div class="tl-content">
+          <div class="tl-year">2014</div>
+          <h4>🏗️ The Beginning</h4>
+          <p>Founded in a 2,000 sqft studio in Pune with 3 trainers and 50 founding members who believed in the dream.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="tl-item right">
+        <div></div>
+        <div class="tl-content">
+          <div class="tl-year">2016</div>
+          <h4>🏊 Aqua Wing Launches</h4>
+          <p>Opened our first Olympic-size pool facility, expanding our aqua fitness and swimming lesson programs.</p>
+        </div>
+      </div>
+      <div class="tl-item left">
+        <div class="tl-content">
+          <div class="tl-year">2017</div>
+          <h4>📈 5-Branch Milestone</h4>
+          <p>Expanded to Mumbai, Nashik, and Nagpur, growing to 5 branches and 10,000 active members.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="tl-item right">
+        <div></div>
+        <div class="tl-content">
+          <div class="tl-year">2020</div>
+          <h4>💻 Digital Pivot</h4>
+          <p>Launched PowerZone Online during the pandemic, delivering live and on-demand classes to 20,000+ members at home.</p>
+        </div>
+      </div>
+      <div class="tl-item left">
+        <div class="tl-content">
+          <div class="tl-year">2022</div>
+          <h4>🏆 National Award</h4>
+          <p>Recognized as "India's Best Fitness Brand" by Sports Authority of India for excellence in community fitness.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="tl-item right">
+        <div></div>
+        <div class="tl-content">
+          <div class="tl-year">2024 — Present</div>
+          <h4>🚀 Nation-Wide Expansion</h4>
+          <p>Now serving 8 cities with 12 centres, 60,000+ members, and a dedicated mobile app for seamless fitness management.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">The People</span>
+      <h2>Meet Our <span>Team</span></h2>
+      <p>Certified professionals passionate about your success.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card" data-anim>
+        <div class="team-avatar">👨‍💼</div>
+        <div class="team-info"><h4>Arjun Mehta</h4><p>Founder & CEO</p></div>
+      </div>
+      <div class="team-card" data-anim data-delay="1">
+        <div class="team-avatar">👩‍⚕️</div>
+        <div class="team-info"><h4>Dr. Priya Kapoor</h4><p>Head of Nutrition</p></div>
+      </div>
+      <div class="team-card" data-anim data-delay="2">
+        <div class="team-avatar">🧑‍🏋️</div>
+        <div class="team-info"><h4>Rohit Sinha</h4><p>Lead Strength Coach</p></div>
+      </div>
+      <div class="team-card" data-anim data-delay="3">
+        <div class="team-avatar">👩‍🧘</div>
+        <div class="team-info"><h4>Ananya Desai</h4><p>Yoga & Wellness Head</p></div>
+      </div>
+      <div class="team-card" data-anim data-delay="1">
+        <div class="team-avatar">🥊</div>
+        <div class="team-info"><h4>Vikram Rajan</h4><p>Boxing Coach</p></div>
+      </div>
+      <div class="team-card" data-anim data-delay="2">
+        <div class="team-avatar">🏊</div>
+        <div class="team-info"><h4>Meera Nair</h4><p>Aqua Fitness Lead</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Member Stories</span>
+      <h2>What Our <span>Members Say</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" data-anim>
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"I lost 18 kg in 6 months thanks to PowerZone's personalised training and nutrition program. The coaches here genuinely care about your progress!"</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">👨</span>
+          <div class="author-info"><h5>Suresh Kumar</h5><p>Member since 2021</p></div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-anim data-delay="1">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"The yoga studio here is absolutely divine. Ananya's classes have transformed not just my body, but my entire mindset. Worth every rupee!"</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">👩</span>
+          <div class="author-info"><h5>Kavya Reddy</h5><p>Member since 2022</p></div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-anim data-delay="2">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"As a competitive swimmer, the Olympic pool and coaching quality here is unmatched. PowerZone is the only gym that treats professional athletes seriously."</p>
+        <div class="testimonial-author">
+          <span class="author-avatar">🧑</span>
+          <div class="author-info"><h5>Aditya Nair</h5><p>Member since 2020</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement and community since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">Cardio Zone</a></li>
+        <li><a href="#">Boxing &amp; MMA</a></li>
+        <li><a href="#">Yoga Classes</a></li>
+        <li><a href="#">Nutrition Coaching</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multimedia — PowerZone Fitness Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    [data-anim] { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    [data-anim].anim-in { opacity:1; transform:translateY(0); }
+    [data-anim][data-delay="1"] { transition-delay:.15s; }
+    [data-anim][data-delay="2"] { transition-delay:.3s; }
+    [data-anim][data-delay="3"] { transition-delay:.45s; }
+
+    /* Video wrapper for responsive 16:9 */
+    .video-wrapper {
+      position:relative;
+      padding-bottom:56.25%;
+      height:0;
+      overflow:hidden;
+      background:#0a0a0a;
+      border-radius:12px 12px 0 0;
+    }
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position:absolute;
+      top:0; left:0;
+      width:100%; height:100%;
+      border:none;
+      border-radius:12px 12px 0 0;
+    }
+
+    /* Custom video player */
+    .custom-video {
+      border-radius:12px 12px 0 0;
+      background:#0a0a0a;
+      overflow:hidden;
+    }
+    .custom-video video { border-radius:0; }
+
+    /* Audio player custom style */
+    .audio-card {
+      background:#1a1a1a;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .audio-visual {
+      height:140px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:4rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .audio-visual::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:conic-gradient(from 0deg, var(--primary), transparent, var(--secondary), transparent, var(--primary));
+      opacity:.2;
+      animation:spin 8s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .audio-card-body { padding:1.2rem; }
+    audio { width:100%; margin-top:.5rem; accent-color:var(--primary); }
+
+    /* Podcast / audio bars animation */
+    .audio-bars {
+      display:flex;
+      align-items:flex-end;
+      gap:3px;
+      height:30px;
+      margin-top:.5rem;
+    }
+    .bar {
+      width:4px;
+      background:var(--primary);
+      border-radius:2px;
+      animation:barAnim 1s ease-in-out infinite alternate;
+    }
+    .bar:nth-child(2) { animation-delay:.1s; }
+    .bar:nth-child(3) { animation-delay:.2s; }
+    .bar:nth-child(4) { animation-delay:.3s; }
+    .bar:nth-child(5) { animation-delay:.4s; }
+    .bar:nth-child(6) { animation-delay:.5s; }
+    .bar:nth-child(7) { animation-delay:.6s; }
+    .bar:nth-child(8) { animation-delay:.7s; }
+    @keyframes barAnim {
+      from { height:4px; opacity:.4; }
+      to   { height:24px; opacity:1; }
+    }
+    .audio-playing .bar { animation-play-state:running; }
+    .audio-paused  .bar { animation-play-state:paused; }
+
+    /* Interactive map section */
+    .map-section {
+      background:#111;
+      border-radius:var(--radius);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .map-tabs { display:flex; background:#0d0d0d; border-bottom:1px solid rgba(255,255,255,.07); }
+    .map-tab {
+      flex:1;
+      padding:.75rem;
+      text-align:center;
+      font-size:.85rem;
+      font-weight:600;
+      color:var(--gray);
+      cursor:pointer;
+      transition:var(--transition);
+      border:none;
+      background:none;
+    }
+    .map-tab.active { color:var(--primary); border-bottom:2px solid var(--primary); }
+    .map-tab:hover { color:var(--white); }
+    .map-panel { display:none; }
+    .map-panel.active { display:block; }
+    .map-panel iframe { width:100%; height:320px; border:none; display:block; }
+
+    /* Workout timer */
+    .timer-widget {
+      background:linear-gradient(135deg,#1a0608,#2a1010);
+      border:1px solid rgba(230,57,70,.2);
+      border-radius:var(--radius);
+      padding:2rem;
+      text-align:center;
+    }
+    .timer-display {
+      font-size:4rem;
+      font-weight:900;
+      color:var(--white);
+      font-family:monospace;
+      margin:1rem 0;
+    }
+    .timer-display span { color:var(--primary); }
+    .timer-btns { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
+    .timer-btn {
+      padding:.6rem 1.5rem;
+      border-radius:50px;
+      border:1px solid rgba(255,255,255,.15);
+      background:#1a1a1a;
+      color:var(--white);
+      font-size:.9rem;
+      font-weight:600;
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .timer-btn.start  { background:var(--primary); border-color:var(--primary); }
+    .timer-btn.stop   { background:#1d3557; border-color:#1d3557; }
+    .timer-btn:hover  { transform:translateY(-2px); }
+    .timer-presets { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-top:.75rem; }
+    .preset-btn {
+      padding:.3rem .8rem;
+      border-radius:50px;
+      border:1px solid rgba(255,255,255,.1);
+      background:none;
+      color:var(--gray);
+      font-size:.78rem;
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .preset-btn:hover { border-color:var(--primary); color:var(--primary); }
+
+    /* Fitness tracker / chart */
+    .chart-container {
+      background:#1a1a1a;
+      border-radius:var(--radius);
+      padding:1.5rem;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .chart-bars {
+      display:flex;
+      align-items:flex-end;
+      gap:.5rem;
+      height:120px;
+      margin:1rem 0;
+    }
+    .chart-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:.3rem; }
+    .chart-bar {
+      width:100%;
+      background:var(--primary);
+      border-radius:4px 4px 0 0;
+      transition:height 1s ease;
+      opacity:.8;
+    }
+    .chart-bar-wrap:hover .chart-bar { opacity:1; }
+    .chart-label { color:var(--gray); font-size:.7rem; text-align:center; }
+    .chart-value { color:var(--white); font-size:.75rem; font-weight:700; }
+
+    /* Media type grid layout */
+    .multimedia-grid { display:grid; gap:1.5rem; }
+    .multimedia-grid.cols-3 { grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+    .multimedia-grid.cols-2 { grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html"><span class="icon">🏋️</span>Power<span>Zone</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="#">Pages ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="multimedia.html" class="active">Multimedia</a></li>
+      </ul>
+    </li>
+    <li><a href="qa.html">Q&amp;A</a></li>
+    <li><a href="register.html">Register</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-content">
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Multimedia <span>Hub</span></h1>
+    <p>Videos, podcasts, maps, and interactive tools — all in one place</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <span>Multimedia</span></div>
+  </div>
+</div>
+
+<!-- ===== TYPE 1: VIDEOS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Type 1 — Video</span>
+      <h2>🎬 Workout <span>Videos</span></h2>
+      <p>Expert-led training videos to complement your in-gym sessions.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="multimedia-grid cols-3">
+
+      <!-- Embedded YouTube Video -->
+      <div class="media-card" data-anim>
+        <div class="video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/IODxDxX7oi4?rel=0&modestbranding=1"
+            title="Full Body HIIT Workout"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="media-card-body">
+          <span class="media-type-badge">📺 YouTube Embed</span>
+          <h4>30-Min Full Body HIIT</h4>
+          <p>High-intensity interval training for fat burn and cardiovascular fitness. No equipment needed.</p>
+        </div>
+      </div>
+
+      <!-- Embedded YouTube Video 2 -->
+      <div class="media-card" data-anim data-delay="1">
+        <div class="video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/U9YlkTJTqOo?rel=0&modestbranding=1"
+            title="Yoga for Beginners"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="media-card-body">
+          <span class="media-type-badge">📺 YouTube Embed</span>
+          <h4>Yoga for Beginners — Morning Flow</h4>
+          <p>A gentle 20-minute morning yoga routine to energise your day and improve flexibility.</p>
+        </div>
+      </div>
+
+      <!-- HTML5 video element -->
+      <div class="media-card" data-anim data-delay="2">
+        <div class="custom-video">
+          <video controls preload="metadata" poster="" style="width:100%;border-radius:12px 12px 0 0;background:#0a0a0a;min-height:170px;display:flex;align-items:center;justify-content:center;">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="media-card-body">
+          <span class="media-type-badge">🎞️ HTML5 Video</span>
+          <h4>PowerZone Facility Tour</h4>
+          <p>Take a 360° virtual tour of our flagship Pune centre — strength floor, pool, studios, and more.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== TYPE 2: AUDIO ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Type 2 — Audio</span>
+      <h2>🎙️ Fitness <span>Podcasts</span></h2>
+      <p>Listen to expert coaches and nutrition specialists on the go.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="multimedia-grid cols-3">
+
+      <div class="audio-card" data-anim>
+        <div class="audio-visual" style="background:linear-gradient(135deg,#1a0608,#3d0c12);">🎙️</div>
+        <div class="audio-card-body">
+          <span class="media-type-badge">🎵 Audio Podcast</span>
+          <h4>Ep. 12: The Science of Muscle Hypertrophy</h4>
+          <p style="color:var(--gray);font-size:.85rem;margin:.3rem 0 .75rem;">Coach Rohit explains progressive overload, volume, and recovery in plain language.</p>
+          <audio controls id="audio1" onplay="setAudioState('bars1','playing')" onpause="setAudioState('bars1','paused')">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+            Your browser does not support audio.
+          </audio>
+          <div class="audio-bars audio-paused" id="bars1">
+            <div class="bar" style="height:8px;"></div>
+            <div class="bar" style="height:14px;"></div>
+            <div class="bar" style="height:20px;"></div>
+            <div class="bar" style="height:10px;"></div>
+            <div class="bar" style="height:18px;"></div>
+            <div class="bar" style="height:6px;"></div>
+            <div class="bar" style="height:14px;"></div>
+            <div class="bar" style="height:22px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="audio-card" data-anim data-delay="1">
+        <div class="audio-visual" style="background:linear-gradient(135deg,#021a10,#073d20);">🥗</div>
+        <div class="audio-card-body">
+          <span class="media-type-badge">🎵 Audio Podcast</span>
+          <h4>Ep. 8: Eating for Fat Loss Without Starving</h4>
+          <p style="color:var(--gray);font-size:.85rem;margin:.3rem 0 .75rem;">Dr. Priya discusses sustainable calorie deficits and macro-balancing strategies.</p>
+          <audio controls id="audio2" onplay="setAudioState('bars2','playing')" onpause="setAudioState('bars2','paused')">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+            Your browser does not support audio.
+          </audio>
+          <div class="audio-bars audio-paused" id="bars2">
+            <div class="bar" style="height:12px;"></div>
+            <div class="bar" style="height:8px;"></div>
+            <div class="bar" style="height:20px;"></div>
+            <div class="bar" style="height:16px;"></div>
+            <div class="bar" style="height:6px;"></div>
+            <div class="bar" style="height:22px;"></div>
+            <div class="bar" style="height:10px;"></div>
+            <div class="bar" style="height:18px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="audio-card" data-anim data-delay="2">
+        <div class="audio-visual" style="background:linear-gradient(135deg,#0a0a20,#15153d);">🧘</div>
+        <div class="audio-card-body">
+          <span class="media-type-badge">🎵 Audio — Guided Meditation</span>
+          <h4>10-Min Pre-Workout Mindfulness</h4>
+          <p style="color:var(--gray);font-size:.85rem;margin:.3rem 0 .75rem;">Ananya guides you through a calming breathing exercise to focus your mind before training.</p>
+          <audio controls id="audio3" onplay="setAudioState('bars3','playing')" onpause="setAudioState('bars3','paused')">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mp3">
+            Your browser does not support audio.
+          </audio>
+          <div class="audio-bars audio-paused" id="bars3">
+            <div class="bar" style="height:6px;"></div>
+            <div class="bar" style="height:16px;"></div>
+            <div class="bar" style="height:10px;"></div>
+            <div class="bar" style="height:20px;"></div>
+            <div class="bar" style="height:14px;"></div>
+            <div class="bar" style="height:8px;"></div>
+            <div class="bar" style="height:18px;"></div>
+            <div class="bar" style="height:12px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== TYPE 3: INTERACTIVE MAP ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Type 3 — Interactive Map</span>
+      <h2>📍 Find Our <span>Locations</span></h2>
+      <p>Locate the nearest PowerZone centre and get directions instantly.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="map-section" data-anim>
+      <div class="map-tabs">
+        <button class="map-tab active" onclick="switchMap(this,'map1')">📍 Pune (HQ)</button>
+        <button class="map-tab" onclick="switchMap(this,'map2')">📍 Mumbai</button>
+        <button class="map-tab" onclick="switchMap(this,'map3')">📍 Bengaluru</button>
+        <button class="map-tab" onclick="switchMap(this,'map4')">📍 Delhi</button>
+      </div>
+      <div class="map-panel active" id="map1">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.275267680513!2d73.84672887496836!3d18.52043206824673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828d43bf9d9ee343!2sShivaji%20Nagar%2C%20Pune%2C%20Maharashtra%20411005!5e0!3m2!1sen!2sin!4v1698765432100!5m2!1sen!2sin" allowfullscreen loading="lazy" title="Pune Location"></iframe>
+      </div>
+      <div class="map-panel" id="map2">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.879234!2d72.877656!3d19.075887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b63aceef0c45%3A0xe0b9e5c8c1d1d1d1!2sBandra%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1698765432101!5m2!1sen!2sin" allowfullscreen loading="lazy" title="Mumbai Location"></iframe>
+      </div>
+      <div class="map-panel" id="map3">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.921098!2d77.594563!3d12.974002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sKoramangala%2C%20Bengaluru!5e0!3m2!1sen!2sin!4v1698765432102!5m2!1sen!2sin" allowfullscreen loading="lazy" title="Bengaluru Location"></iframe>
+      </div>
+      <div class="map-panel" id="map4">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.813241!2d77.2090!3d28.6366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sConnaught%20Place%2C%20New%20Delhi!5e0!3m2!1sen!2sin!4v1698765432103!5m2!1sen!2sin" allowfullscreen loading="lazy" title="Delhi Location"></iframe>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem;">
+      <div style="background:#1a1a1a;border-radius:10px;padding:1.2rem;border:1px solid rgba(255,255,255,.07);">
+        <strong style="color:var(--white);">🏙️ Pune (HQ)</strong>
+        <p style="color:var(--gray);font-size:.82rem;margin-top:.3rem;">123 Fitness Blvd, Shivaji Nagar<br>📞 +91 20-1234-5678</p>
+      </div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:1.2rem;border:1px solid rgba(255,255,255,.07);">
+        <strong style="color:var(--white);">🏙️ Mumbai</strong>
+        <p style="color:var(--gray);font-size:.82rem;margin-top:.3rem;">45 Bandra West, Mumbai<br>📞 +91 22-9876-5432</p>
+      </div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:1.2rem;border:1px solid rgba(255,255,255,.07);">
+        <strong style="color:var(--white);">🏙️ Bengaluru</strong>
+        <p style="color:var(--gray);font-size:.82rem;margin-top:.3rem;">78 Koramangala, Bengaluru<br>📞 +91 80-4567-8901</p>
+      </div>
+      <div style="background:#1a1a1a;border-radius:10px;padding:1.2rem;border:1px solid rgba(255,255,255,.07);">
+        <strong style="color:var(--white);">🏙️ Delhi</strong>
+        <p style="color:var(--gray);font-size:.82rem;margin-top:.3rem;">22 Connaught Place, Delhi<br>📞 +91 11-2345-6789</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TYPE 4: INTERACTIVE WORKOUT TIMER ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Type 4 — Interactive Tool</span>
+      <h2>⏱️ Workout <span>Timer</span></h2>
+      <p>Use our interactive timer to structure your training sessions.</p>
+      <div class="divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;">
+
+      <div class="timer-widget" data-anim>
+        <h3 style="color:var(--white);margin-bottom:.5rem;">🏋️ Workout Timer</h3>
+        <p style="color:var(--gray);font-size:.85rem;">Round-based HIIT timer</p>
+        <div class="timer-display" id="timerDisplay">
+          <span id="timerMins">00</span>:<span id="timerSecs">00</span>
+        </div>
+        <div style="margin-bottom:1rem;color:var(--gray);font-size:.85rem;">
+          Round: <span id="roundDisplay" style="color:var(--primary);font-weight:700;">1</span> / <span id="totalRounds">3</span>
+          &nbsp;|&nbsp;
+          Phase: <span id="phaseDisplay" style="color:#f4a261;font-weight:700;">Work</span>
+        </div>
+        <div class="timer-btns">
+          <button class="timer-btn start" id="startBtn" onclick="startTimer()">▶ Start</button>
+          <button class="timer-btn stop"  id="pauseBtn" onclick="pauseTimer()">⏸ Pause</button>
+          <button class="timer-btn"       onclick="resetTimer()">↺ Reset</button>
+        </div>
+        <div class="timer-presets">
+          <button class="preset-btn" onclick="setPreset(40,20,3)">Tabata 40/20</button>
+          <button class="preset-btn" onclick="setPreset(30,15,4)">HIIT 30/15</button>
+          <button class="preset-btn" onclick="setPreset(60,30,5)">Endurance 60/30</button>
+          <button class="preset-btn" onclick="setPreset(20,10,8)">Classic Tabata</button>
+        </div>
+      </div>
+
+      <div class="chart-container" data-anim data-delay="1">
+        <h3 style="color:var(--white);margin-bottom:.3rem;">📊 Weekly Progress Tracker</h3>
+        <p style="color:var(--gray);font-size:.85rem;">Calories burned this week (kcal)</p>
+        <div class="chart-bars" id="chartBars">
+          <div class="chart-bar-wrap"><div class="chart-value">420</div><div class="chart-bar" style="height:70px;"></div><div class="chart-label">Mon</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">580</div><div class="chart-bar" style="height:96px;background:#f4a261;"></div><div class="chart-label">Tue</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">0</div><div class="chart-bar" style="height:0px;opacity:.2;"></div><div class="chart-label">Wed</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">720</div><div class="chart-bar" style="height:120px;"></div><div class="chart-label">Thu</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">350</div><div class="chart-bar" style="height:58px;"></div><div class="chart-label">Fri</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">890</div><div class="chart-bar" style="height:120px;background:#2a9d8f;"></div><div class="chart-label">Sat</div></div>
+          <div class="chart-bar-wrap"><div class="chart-value">0</div><div class="chart-bar" style="height:0px;opacity:.2;"></div><div class="chart-label">Sun</div></div>
+        </div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.5rem;">
+          <span style="color:var(--gray);font-size:.82rem;">🔴 Best day: <strong style="color:var(--white)">Saturday</strong></span>
+          <span style="color:var(--gray);font-size:.82rem;">📊 Total: <strong style="color:var(--primary)">2,960 kcal</strong></span>
+          <span style="color:var(--gray);font-size:.82rem;">📅 Goal: <strong style="color:#2a9d8f">3,500 kcal</strong></span>
+        </div>
+        <div style="margin-top:1rem;background:#111;border-radius:8px;padding:.75rem;">
+          <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--gray);margin-bottom:.3rem;">
+            <span>Weekly Goal Progress</span><span style="color:var(--primary);">85%</span>
+          </div>
+          <div style="height:6px;background:#222;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:85%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width 1.5s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">🏋️ Power<span>Zone</span></div>
+      <p>Your premier fitness destination. Elevating lives through movement and community since 2014.</p>
+      <div class="social-links">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="qa.html">Q&amp;A Forum</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Media Types</h4>
+      <ul>
+        <li><a href="#">🎬 Training Videos</a></li>
+        <li><a href="#">🎙️ Fitness Podcasts</a></li>
+        <li><a href="#">📍 Location Maps</a></li>
+        <li><a href="#">⏱️ Workout Timer</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Fitness Blvd, Pune</a></li>
+        <li><a href="tel:+911234567890">📞 +91 12345 67890</a></li>
+        <li><a href="mailto:hello@powerzone.in">✉️ hello@powerzone.in</a></li>
+        <li><a href="#">🕐 Mon–Sat: 5AM–11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <span>PowerZone Fitness Club</span>. All rights reserved.</p>
+    <p>Designed with ❤️ for fitness lovers</p>
+  </div>
+</footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+/* ===== MAP TABS ===== */
+function switchMap(btn, panelId) {
+  document.querySelectorAll('.map-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.map-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ===== AUDIO BARS ===== */
+function setAudioState(barsId, state) {
+  const bars = document.getElementById(barsId);
+  if (!bars) return;
+  bars.className = 'audio-bars audio-' + state;
+}
+
+/* ===== WORKOUT TIMER ===== */
+let workSecs = 40, restSecs = 20, totalRoundsCount = 3;
+let currentRound = 1, isWork = true;
+let timeLeft, timerInterval, isRunning = false;
+
+function setPreset(work, rest, rounds) {
+  workSecs = work; restSecs = rest; totalRoundsCount = rounds;
+  resetTimer();
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  isRunning = false;
+  currentRound = 1;
+  isWork = true;
+  timeLeft = workSecs;
+  updateTimerDisplay();
+  document.getElementById('roundDisplay').textContent = currentRound;
+  document.getElementById('totalRounds').textContent = totalRoundsCount;
+  document.getElementById('phaseDisplay').textContent = 'Work';
+  document.getElementById('phaseDisplay').style.color = '#e63946';
+}
+
+function startTimer() {
+  if (isRunning) return;
+  if (timeLeft === undefined) timeLeft = workSecs;
+  isRunning = true;
+  timerInterval = setInterval(tick, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  isRunning = false;
+}
+
+function tick() {
+  timeLeft--;
+  updateTimerDisplay();
+  if (timeLeft <= 0) {
+    if (isWork) {
+      isWork = false;
+      timeLeft = restSecs;
+      document.getElementById('phaseDisplay').textContent = 'Rest';
+      document.getElementById('phaseDisplay').style.color = '#2a9d8f';
+    } else {
+      currentRound++;
+      if (currentRound > totalRoundsCount) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        showToast('🎉 Workout complete! Great job!', '🏆');
+        resetTimer();
+        return;
+      }
+      isWork = true;
+      timeLeft = workSecs;
+      document.getElementById('roundDisplay').textContent = currentRound;
+      document.getElementById('phaseDisplay').textContent = 'Work';
+      document.getElementById('phaseDisplay').style.color = '#e63946';
+    }
+  }
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  document.getElementById('timerMins').textContent = String(mins).padStart(2,'0');
+  document.getElementById('timerSecs').textContent = String(secs).padStart(2,'0');
+}
+
+// Init timer display
+document.addEventListener('DOMContentLoaded', () => {
+  timeLeft = workSecs;
+  updateTimerDisplay();
+  document.getElementById('totalRounds').textContent = totalRoundsCount;
+});
+</script>
+</body>
+</html>
